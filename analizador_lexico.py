@@ -4,7 +4,7 @@ import re # Necesario para separar puntuación y regex rápidas
 # Definimos las expresiones regulares (Ajustadas ligeramente)
 ER_PALABRA_BASICA = r"^[a-záéíóúñ]+$"
 ER_PUNTUACION = r"^[.,;:¿?¡!]$" 
-ER_DIGITO = r"^\d+$"
+ER_DIGITO = r"^\d+$" 
 
 def cargar_diccionario_csv(ruta_csv):
     try:

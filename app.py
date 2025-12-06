@@ -52,10 +52,6 @@ def analizar_texto(texto_entrada, diccionario_validas):
 
     return resultados
 
-
-# ==============================
-# 🚀 STREAMLIT APP
-# ==============================
 st.title("🔎 Analizador Léxico en Español")
 st.write("Proyecto Final - Lenguajes y Autómatas II")
 
@@ -65,12 +61,27 @@ st.divider()
 ruta_csv = "/Users/limberg/Documents/ALL_Cuatrimestres/7mo-Cuatrimestre/lenguajes-y-automatas/proyecto-final-2/diccionario_español.csv"
 diccionario = cargar_diccionario_csv(ruta_csv)
 
-# Input del usuario
-texto_usuario = st.text_area("✏️ Escribe una oración para analizar:", height=120)
+# ------------------------------
+# Cargar archivo .txt
+# ------------------------------
+archivo_txt = st.file_uploader("📄 Sube un archivo .txt para analizar", type=["txt"])
 
+texto_usuario = ""
+
+if archivo_txt is not None:
+    try:
+        texto_usuario = archivo_txt.read().decode("utf-8")
+        st.success("Archivo cargado correctamente.")
+        st.text_area("Contenido del archivo:", texto_usuario, height=180, disabled=True)
+    except Exception as e:
+        st.error(f"Error al leer el archivo: {e}")
+
+# ------------------------------
+# Botón Analizar
+# ------------------------------
 if st.button("Analizar"):
     if texto_usuario.strip() == "":
-        st.warning("⚠️ Ingresa una oración para analizar.")
+        st.warning("⚠️ Primero sube un archivo .txt con texto.")
     else:
         tokens = analizar_texto(texto_usuario, diccionario)
 
@@ -79,7 +90,7 @@ if st.button("Analizar"):
         # Mostrar estilo tipo consola
         st.code("\n".join([f"{tipo:25} | {lexema}" for tipo, lexema in tokens]), language="text")
 
-        # Mostrar en tabla también
+        # Mostrar tabla
         df_result = pd.DataFrame(tokens, columns=["Token", "Lexema"])
         st.table(df_result)
 
